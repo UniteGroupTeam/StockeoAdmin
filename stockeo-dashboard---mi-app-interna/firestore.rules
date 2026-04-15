@@ -1,0 +1,89 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: sales
+    // Fields:
+    //   - productId: string (required)
+    //   - productName: string (required)
+    //   - category: string (required)
+    //   - quantity: number (required, > 0)
+    //   - saleType: string (required, ['Menudeo', 'Mayoreo', 'Distribuidor'])
+    //   - finalPrice: number (required, >= 0)
+    //   - cost: number (required, >= 0)
+    //   - profit: number (required)
+    //   - date: string (required, ISO format)
+    //   - clientName: string (optional)
+    //   - timestamp: timestamp (required, server-generated)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "tilinrodrigo3@gmail.com" && request.auth.token.email_verified == true)); // Default admin
+    }
+
+    function hasOnlyAllowedFields(data, allowedFields) {
+      return data.keys().hasOnly(allowedFields);
+    }
+
+    function isValidSaleItem(item) {
+      return item.productId is string &&
+             item.productName is string &&
+             item.category is string &&
+             item.quantity is number && item.quantity > 0 &&
+             item.saleType in ['Menudeo', 'Mayoreo', 'Distribuidor'] &&
+             item.finalPrice is number && item.finalPrice >= 0 &&
+             item.cost is number && item.cost >= 0 &&
+             item.profit is number;
+    }
+
+    function isValidSale(data) {
+      return hasOnlyAllowedFields(data, ['items', 'totalPrice', 'totalCost', 'totalProfit', 'date', 'clientName', 'timestamp']) &&
+             data.items is list &&
+             data.totalPrice is number && data.totalPrice >= 0 &&
+             data.totalCost is number && data.totalCost >= 0 &&
+             data.totalProfit is number &&
+             data.date is string &&
+             (!('clientName' in data) || data.clientName is string) &&
+             data.timestamp is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /sales/{saleId} {
+      // Allow read for any authenticated user (internal app)
+      allow read: if isAuthenticated();
+      
+      // Allow create with validation
+      allow create: if isAuthenticated() && isValidSale(request.resource.data);
+      
+      // Allow update/delete for admins
+      allow update, delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

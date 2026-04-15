@@ -1,0 +1,5 @@
+{
+  "name": "Stockeo Dashboard - Mi App Interna",
+  "description": "Dashboard interno para gestión de inventario, ventas y ganancias de Stockeo. Incluye catálogo, registro de ventas y analíticas en tiempo real.",
+  "requestFramePermissions": []
+}
