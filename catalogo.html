@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth dark">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5LKLPVFTNK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-5LKLPVFTNK');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Stockeo | Catálogo Mayoreo y Menudeo</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        main: 'var(--bg-main)',
+                        sec: 'var(--bg-sec)',
+                        textm: 'var(--text-main)',
+                        textmuted: 'var(--text-muted)',
+                        gbg: 'var(--glass-bg)',
+                        gborder: 'var(--glass-border)',
+                        btnbg: 'var(--btn-bg)',
+                        btntext: 'var(--btn-text)',
+                        bdim: 'var(--border-dim)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            --bg-main: #FDFDFD;
+            --bg-sec: #F5F5F5;
+            --text-main: #0A0A0A;
+            --text-muted: #555555;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --btn-bg: #050505;
+            --btn-text: #FAFAFA;
+            --border-dim: rgba(0,0,0,0.05);
+            --card-grad: linear-gradient(145deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%);
+            --glow: rgba(0,0,0,0.05);
+        }
+        html.dark {
+            --bg-main: #050505;
+            --bg-sec: #0A0A0A;
+            --text-main: #FAFAFA;
+            --text-muted: #A1A1AA;
+            --glass-bg: rgba(15, 15, 15, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --btn-bg: #E5E5E5;
+            --btn-text: #050505;
+            --border-dim: rgba(255,255,255,0.05);
+            --card-grad: linear-gradient(145deg, rgba(30,30,30,0.5) 0%, rgba(10,10,10,0.5) 100%);
+            --glow: rgba(255,255,255,0.05);
+        }
+
+        body { background-color: var(--bg-main); color: var(--text-main); overflow-x: hidden; -webkit-tap-highlight-color: transparent; transition: background-color 0.4s, color 0.4s; }
+        
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); border-bottom: 1px solid var(--glass-border); transition: all 0.4s; }
+        .glass-card { background: var(--card-grad); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px var(--glow); }
+        .glass-card:hover { transform: translateY(-4px); border-color: var(--text-muted); box-shadow: 0 15px 30px var(--glow); }
+        
+        .material-symbols-rounded { font-variation-settings: 'FILL' 1; }
+
+        .mobile-nav { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; border-radius: 999px; z-index: 100; display: flex; justify-content: space-around; align-items: center; padding: 12px 16px; background: var(--glass-bg); backdrop-filter: saturate(180%) blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 20px 40px var(--glow); transition: all 0.4s; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; transition: color 0.3s; font-size: 10px; font-weight: 500; gap: 4px; }
+        .nav-item.active, .nav-item:hover { color: var(--text-main); }
+        
+        @media (min-width: 768px) { .mobile-nav { display: none; } }
+        @media (max-width: 767px) { .desktop-nav { display: none; } body { padding-bottom: 90px; } }
+
+        .filter-pill { transition: all 0.3s ease; border: 1px solid var(--glass-border); background: var(--gbg); color: var(--textmuted); }
+        .filter-pill.active { background: var(--textm); color: var(--bg-main); border-color: var(--textm); font-weight: 600; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .pwa-only { display: none; }
+        @media all and (display-mode: standalone) { .pwa-hidden { display: none !important; } .pwa-only-flex { display: flex !important; } }
+        
+        .theme-toggle-btn { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: 0.3s; background: var(--gbg); color: var(--textm); border: 1px solid var(--glass-border); }
+        .theme-toggle-btn:hover { background: var(--bdim); }
+    </style>
+</head>
+<body class="antialiased min-h-[100dvh] flex flex-col">
+
+    <!-- Desktop Nav -->
+    <nav class="desktop-nav fixed w-full z-50 top-0 glass-panel transition-all py-4" id="desktopNav">
+        <div class="px-8 flex justify-between items-center max-w-7xl mx-auto">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="https://i.imgur.com/o3NaSvT.png" alt="Stockeo" class="h-10 md:h-12 object-contain logo-horiz">
+            </a>
+            
+            <div class="flex gap-6 text-sm font-medium text-textmuted">
+                <a href="index.html" class="hover:text-textm transition">Inicio</a>
+                <a href="catalogo.html" class="text-textm">Catálogo</a>
+                <a href="terminos.html" class="hover:text-textm transition">Términos</a>
+                <a href="envios.html" class="hover:text-textm transition">Envíos</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Cambiar Tema">
+                    <span class="material-symbols-rounded" id="theme-icon">dark_mode</span>
+                </button>
+                <button class="pwa-install-btn hidden px-5 py-2 bg-textm text-bg-main text-sm font-semibold rounded-full hover:scale-105 transition-transform items-center gap-2" onclick="installPWA()">
+                    Instalar App <span class="material-symbols-rounded text-[18px]">install_mobile</span>
+                </button>
+                <button id="cart-trigger" class="relative group flex items-center justify-center p-2 rounded-full hover:bg-gborder transition">
+                    <span class="material-symbols-rounded text-textm font-bold">shopping_bag</span>
+                    <span id="cart-count" class="absolute top-1 right-1 bg-textm text-bg-main text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <a href="index.html" class="nav-item">
+            <span class="material-symbols-rounded">home</span>
+            Inicio
+        </a>
+        <a href="catalogo.html" class="nav-item active">
+            <span class="material-symbols-rounded">storefront</span>
+            Catálogo
+        </a>
+        <button id="cart-trigger-mobile" class="nav-item relative bg-transparent border-none">
+            <span class="material-symbols-rounded">shopping_bag</span>
+            Carrito
+            <span id="cart-count-mobile" class="absolute -top-1 -right-2 bg-textm text-bg-main text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden">0</span>
+        </button>
+        <button onclick="toggleTheme()" class="nav-item border-none bg-transparent">
+            <span class="material-symbols-rounded" id="theme-icon-mobile">dark_mode</span>
+            Tema
+        </button>
+        <button class="nav-item border-none bg-transparent pwa-install-btn pwa-only-flex hidden" onclick="installPWA()">
+            <span class="material-symbols-rounded">install_mobile</span> Instalar
+        </button>
+    </nav>
+
+    <!-- Filters header -->
+    <div class="pt-24 md:pt-32 pb-6 px-6 max-w-7xl mx-auto w-full z-40 bg-main">
+        <div class="flex flex-col md:flex-row gap-6 md:items-center justify-between">
+            <h1 class="text-4xl font-display font-bold text-textm">Store</h1>
+            <div class="relative w-full md:w-80 group">
+                <span class="material-symbols-rounded absolute left-4 top-1/2 -translate-y-1/2 text-textmuted">search</span>
+                <input type="text" id="search-input" placeholder="Buscar dispositivos..." class="w-full bg-gbg border border-gborder rounded-full py-3 pl-12 pr-6 text-sm text-textm focus:outline-none focus:border-textm focus:bg-gbg transition-all placeholder-textmuted">
+            </div>
+        </div>
+        
+        <div class="flex gap-3 overflow-x-auto hide-scroll mt-8 pb-2" id="filters-container">
+            <button class="filter-pill active px-6 py-2 rounded-full text-xs whitespace-nowrap" data-cat="all">Todos</button>
+            <button class="filter-pill px-6 py-2 rounded-full text-xs whitespace-nowrap hover:bg-gborder" data-cat="AirPods y Auriculares">Auriculares</button>
+            <button class="filter-pill px-6 py-2 rounded-full text-xs whitespace-nowrap hover:bg-gborder" data-cat="Audífonos y Bocinas">Bocinas</button>
+            <button class="filter-pill px-6 py-2 rounded-full text-xs whitespace-nowrap hover:bg-gborder" data-cat="Smartwatches">Smartwatches</button>
+            <button class="filter-pill px-6 py-2 rounded-full text-xs whitespace-nowrap hover:bg-gborder" data-cat="Carga y Powerbanks">Energía</button>
+            <button class="filter-pill px-6 py-2 rounded-full text-xs whitespace-nowrap hover:bg-gborder" data-cat="Gaming y Accesorios">Gaming</button>
+            <button class="filter-pill px-6 py-2 rounded-full text-xs whitespace-nowrap hover:bg-gborder" data-cat="Hogar y Cocina">Hogar</button>
+            <button class="filter-pill px-6 py-2 rounded-full text-xs whitespace-nowrap hover:bg-gborder" data-cat="Otros">Otros</button>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <main class="px-6 pb-20 max-w-7xl mx-auto w-full flex-grow bg-main">
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+            <!-- JS Rendered Items -->
+        </div>
+        
+        <div id="empty-msg" class="hidden flex flex-col items-center justify-center py-20 text-textmuted">
+            <span class="material-symbols-rounded text-6xl mb-4 opacity-30">inventory_2</span>
+            <p class="font-display">No hay resultados</p>
+        </div>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-overlay" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300"></div>
+    <div id="cart-panel" class="fixed inset-y-0 right-0 w-full md:w-[400px] z-[120] bg-sec border-l border-gborder flex flex-col transform translate-x-full transition-transform duration-300 shadow-2xl">
+        <div class="p-6 border-b border-gborder flex justify-between items-center bg-gbg">
+            <h3 class="font-display font-bold text-xl text-textm flex items-center gap-2">Mi Bolsa</h3>
+            <button id="close-cart" class="text-textmuted hover:text-textm transition rounded-full p-1 hover:bg-gborder"><span class="material-symbols-rounded">close</span></button>
+        </div>
+        
+        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4 hide-scroll"></div>
+        
+        <div class="p-6 border-t border-gborder bg-main space-y-6">
+            <div class="flex justify-between items-center">
+                <span class="text-textmuted text-sm">Total Estimado</span>
+                <span id="cart-total" class="font-display font-bold text-2xl text-textm">$0.00</span>
+            </div>
+            <button id="checkout-btn" class="w-full py-4 bg-btnbg text-btntext font-semibold rounded-full hover:scale-[1.02] transition-transform flex justify-center items-center gap-2 shadow-lg">
+                Proceder al Pago <span class="material-symbols-rounded">arrow_forward</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- FLOAT WHATSAPP -->
+    <div class="fixed bottom-24 md:bottom-8 right-6 z-[1500] flex flex-col items-end gap-3">
+        <div id="wa-menu" class="hidden flex-col gap-2 transform translate-y-4 opacity-0 transition-all duration-300 items-end">
+            <a href="https://wa.me/525574123521" target="_blank" class="bg-gbg backdrop-blur-md border border-gborder text-textm px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 hover:bg-gborder transition font-medium text-sm whitespace-nowrap">
+                <span class="material-symbols-rounded text-blue-500">support_agent</span> Contacto Directo
+            </a>
+            <button onclick="openWAGroup()" class="bg-gbg backdrop-blur-md border border-gborder text-textm px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 hover:bg-gborder transition font-medium text-sm whitespace-nowrap hover:scale-[1.02]">
+                <span class="material-symbols-rounded text-[#25D366]">groups</span> Unirse al Grupo
+            </button>
+        </div>
+        <button onclick="toggleWAMenu()" class="bg-[#25D366] text-white p-4 rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform flex items-center justify-center">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- WA Group Modal -->
+    <div id="wa-group-modal" class="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-6">
+        <div class="bg-sec border border-gborder rounded-3xl p-8 max-w-sm w-full relative flex flex-col items-center text-center shadow-2xl transform scale-95 transition-transform duration-300" id="wa-group-card">
+            <button onclick="closeWAGroup()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-gborder rounded-full text-textmuted hover:text-textm transition"><span class="material-symbols-rounded text-[18px]">close</span></button>
+            <div class="w-16 h-16 bg-[#25D366]/20 rounded-full flex items-center justify-center mb-4 text-[#25D366]">
+                <span class="material-symbols-rounded text-3xl">groups</span>
+            </div>
+            <h3 class="text-xl font-display font-bold text-textm mb-2">Comunidad Stockeo</h3>
+            <p class="text-sm text-textmuted mb-6">Únete para conocer el catálogo completo, noticias y rastrear envíos fácilmente.</p>
+            
+            <img src="https://i.imgur.com/vu6ESWi.jpeg" alt="QR WhatsApp" class="w-48 h-48 rounded-xl object-cover mb-6 border border-gborder hidden md:block">
+            
+            <a href="https://chat.whatsapp.com/IRRGTmKxWLPFSXUOc15cw4?mode=gi_t" target="_blank" class="w-full py-4 bg-[#25D366] text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-lg">
+                Entrar al Chat
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Theme Logic
+        const iconBtn1 = document.getElementById('theme-icon');
+        const iconBtn2 = document.getElementById('theme-icon-mobile');
+        const logoHoriz = document.querySelector('.logo-horiz');
+
+        function updateThemeElements(isDark) {
+            logoHoriz.src = isDark ? 'https://i.imgur.com/o3NaSvT.png' : 'https://i.imgur.com/ZCSvC1j.png';
+            if(iconBtn1) iconBtn1.innerText = isDark ? 'light_mode' : 'dark_mode';
+            if(iconBtn2) iconBtn2.innerText = isDark ? 'light_mode' : 'dark_mode';
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeElements(isDark);
+        }
+
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeElements(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeElements(true);
+        }
+
+        const products = [
+            { id: 'airpods-max-oem-promo-2x1-0', name: 'AirPods Max OEM Promo 2x1', price: 899, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=AirPods%20Max%20OEM%20Promo%202x1', badge: 'PROMO', desc: 'Descubre AirPods Max OEM Promo 2x1, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $899. Ideal para tus necesidades y con la mayor calidad. PROMO 2x1 - BEST SELLER.' },
+            { id: 'airpods-pro-3g-oem-1', name: 'AirPods Pro 3G OEM', price: 799, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=AirPods%20Pro%203G%20OEM', badge: '', desc: 'Descubre AirPods Pro 3G OEM, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'airpods-pro-2g-calidad-original-2', name: 'AirPods Pro 2G Calidad Original', price: 849, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=AirPods%20Pro%202G%20Calidad%20Original', badge: '', desc: 'Descubre AirPods Pro 2G Calidad Original, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $849. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'g-tide-earpods-future-3', name: 'G-TIDE Earpods Future', price: 699, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=G-TIDE%20Earpods%20Future', badge: '', desc: 'Descubre G-TIDE Earpods Future, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $699. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'aud-fonos-moreka-bl030-4', name: 'Audífonos Moreka BL030', price: 799, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=Aud%C3%ADfonos%20Moreka%20BL030', badge: '', desc: 'Descubre Audífonos Moreka BL030, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'aud-fonos-l11-g-tide-5', name: 'Audífonos L11 G-TIDE', price: 449, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=Aud%C3%ADfonos%20L11%20G-TIDE', badge: '', desc: 'Descubre Audífonos L11 G-TIDE, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $449. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'aud-fonos-g-tide-g1-rgb-6', name: 'Audífonos G-TIDE G1 RGB', price: 599, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=Aud%C3%ADfonos%20G-TIDE%20G1%20RGB', badge: '', desc: 'Descubre Audífonos G-TIDE G1 RGB, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $599. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'aud-fonos-hi-beat-g-tide-7', name: 'Audífonos Hi Beat G-TIDE', price: 999, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=Aud%C3%ADfonos%20Hi%20Beat%20G-TIDE', badge: '', desc: 'Descubre Audífonos Hi Beat G-TIDE, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $999. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'aud-fonos-ac01-g-tide-8', name: 'Audífonos AC01 G-TIDE', price: 449, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=Aud%C3%ADfonos%20AC01%20G-TIDE', badge: '', desc: 'Descubre Audífonos AC01 G-TIDE, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $449. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'aud-fonos-c1-lite-9', name: 'Audífonos C1 Lite', price: 449, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=Aud%C3%ADfonos%20C1%20Lite', badge: '', desc: 'Descubre Audífonos C1 Lite, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $449. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'aud-fonos-de-cable-jack-3-5mm-10', name: 'Audífonos de Cable Jack 3.5mm', price: 149, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=Aud%C3%ADfonos%20de%20Cable%20Jack%203.5mm', badge: '', desc: 'Descubre Audífonos de Cable Jack 3.5mm, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $149. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'aud-fonos-de-cable-tipo-c-11', name: 'Audífonos de Cable Tipo C', price: 149, category: 'AirPods y Auriculares', img: 'https://placehold.co/400x400/151515/FFF?text=Aud%C3%ADfonos%20de%20Cable%20Tipo%20C', badge: '', desc: 'Descubre Audífonos de Cable Tipo C, un producto destacado dentro de la categoria AirPods y Auriculares con un excelente precio de menudeo de $149. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'bocina-y-bater-a-moreka-12', name: 'Bocina y Batería Moreka', price: 899, category: 'Audífonos y Bocinas', img: 'https://placehold.co/400x400/151515/FFF?text=Bocina%20y%20Bater%C3%ADa%20Moreka', badge: '', desc: 'Descubre Bocina y Batería Moreka, un producto destacado dentro de la categoria Audífonos y Bocinas con un excelente precio de menudeo de $899. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'bocina-g-tide-sh20-13', name: 'Bocina G-TIDE SH20', price: 599, category: 'Audífonos y Bocinas', img: 'https://placehold.co/400x400/151515/FFF?text=Bocina%20G-TIDE%20SH20', badge: '', desc: 'Descubre Bocina G-TIDE SH20, un producto destacado dentro de la categoria Audífonos y Bocinas con un excelente precio de menudeo de $599. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'bocina-g-tide-sh50-14', name: 'Bocina G-TIDE SH50', price: 1299, category: 'Audífonos y Bocinas', img: 'https://placehold.co/400x400/151515/FFF?text=Bocina%20G-TIDE%20SH50', badge: '', desc: 'Descubre Bocina G-TIDE SH50, un producto destacado dentro de la categoria Audífonos y Bocinas con un excelente precio de menudeo de $1299. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'bocina-g-tide-sv80-15', name: 'Bocina G-TIDE SV80', price: 1799, category: 'Audífonos y Bocinas', img: 'https://placehold.co/400x400/151515/FFF?text=Bocina%20G-TIDE%20SV80', badge: '', desc: 'Descubre Bocina G-TIDE SV80, un producto destacado dentro de la categoria Audífonos y Bocinas con un excelente precio de menudeo de $1799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'bocina-g-tide-thunderbass-16', name: 'Bocina G-TIDE Thunderbass', price: 3999, category: 'Audífonos y Bocinas', img: 'https://placehold.co/400x400/151515/FFF?text=Bocina%20G-TIDE%20Thunderbass', badge: '', desc: 'Descubre Bocina G-TIDE Thunderbass, un producto destacado dentro de la categoria Audífonos y Bocinas con un excelente precio de menudeo de $3999. Ideal para tus necesidades y con la mayor calidad. Envío gratis.' },
+            { id: 'bocina-jbl-flip-11-17', name: 'Bocina JBL Flip 11', price: 549, category: 'Audífonos y Bocinas', img: 'https://placehold.co/400x400/151515/FFF?text=Bocina%20JBL%20Flip%2011', badge: '', desc: 'Descubre Bocina JBL Flip 11, un producto destacado dentro de la categoria Audífonos y Bocinas con un excelente precio de menudeo de $549. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'barra-de-sonido-con-subwoofer-18', name: 'Barra de Sonido con Subwoofer', price: 1999, category: 'Audífonos y Bocinas', img: 'https://placehold.co/400x400/151515/FFF?text=Barra%20de%20Sonido%20con%20Subwoofer', badge: '', desc: 'Descubre Barra de Sonido con Subwoofer, un producto destacado dentro de la categoria Audífonos y Bocinas con un excelente precio de menudeo de $1999. Ideal para tus necesidades y con la mayor calidad. Envío gratis en menudeo.' },
+            { id: 'smart-watch-q1-19', name: 'Smart Watch Q1', price: 799, category: 'Smartwatches', img: 'https://placehold.co/400x400/151515/FFF?text=Smart%20Watch%20Q1', badge: '', desc: 'Descubre Smart Watch Q1, un producto destacado dentro de la categoria Smartwatches con un excelente precio de menudeo de $799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'smart-watch-romance-20', name: 'Smart Watch Romance', price: 1399, category: 'Smartwatches', img: 'https://placehold.co/400x400/151515/FFF?text=Smart%20Watch%20Romance', badge: '', desc: 'Descubre Smart Watch Romance, un producto destacado dentro de la categoria Smartwatches con un excelente precio de menudeo de $1399. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'smart-watch-power-21', name: 'Smart Watch Power', price: 1599, category: 'Smartwatches', img: 'https://placehold.co/400x400/151515/FFF?text=Smart%20Watch%20Power', badge: '', desc: 'Descubre Smart Watch Power, un producto destacado dentro de la categoria Smartwatches con un excelente precio de menudeo de $1599. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'smart-watch-r8-pro-22', name: 'Smart Watch R8 Pro', price: 1799, category: 'Smartwatches', img: 'https://placehold.co/400x400/151515/FFF?text=Smart%20Watch%20R8%20Pro', badge: '', desc: 'Descubre Smart Watch R8 Pro, un producto destacado dentro de la categoria Smartwatches con un excelente precio de menudeo de $1799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'hk11-ultra-3-pro-max-23', name: 'HK11 Ultra 3 / Pro Max+', price: 1799, category: 'Smartwatches', img: 'https://placehold.co/400x400/151515/FFF?text=HK11%20Ultra%203%20%2F%20Pro%20Max%2B', badge: '', desc: 'Descubre HK11 Ultra 3 / Pro Max+, un producto destacado dentro de la categoria Smartwatches con un excelente precio de menudeo de $1799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'hk10-mini-24', name: 'HK10 Mini', price: 1799, category: 'Smartwatches', img: 'https://placehold.co/400x400/151515/FFF?text=HK10%20Mini', badge: '', desc: 'Descubre HK10 Mini, un producto destacado dentro de la categoria Smartwatches con un excelente precio de menudeo de $1799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'bater-a-moreka-10-000-mah-25', name: 'Batería Moreka 10,000 mAh', price: 449, category: 'Carga y Powerbanks', img: 'https://placehold.co/400x400/151515/FFF?text=Bater%C3%ADa%20Moreka%2010%2C000%20mAh', badge: '', desc: 'Descubre Batería Moreka 10,000 mAh, un producto destacado dentro de la categoria Carga y Powerbanks con un excelente precio de menudeo de $449. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'bater-a-magsafe-g-tide-slim-01-26', name: 'Batería MagSafe G-TIDE Slim 01', price: 599, category: 'Carga y Powerbanks', img: 'https://placehold.co/400x400/151515/FFF?text=Bater%C3%ADa%20MagSafe%20G-TIDE%20Slim%2001', badge: '', desc: 'Descubre Batería MagSafe G-TIDE Slim 01, un producto destacado dentro de la categoria Carga y Powerbanks con un excelente precio de menudeo de $599. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'bater-a-magsafe-calidad-original-27', name: 'Batería MagSafe Calidad Original', price: 449, category: 'Carga y Powerbanks', img: 'https://placehold.co/400x400/151515/FFF?text=Bater%C3%ADa%20MagSafe%20Calidad%20Original', badge: '', desc: 'Descubre Batería MagSafe Calidad Original, un producto destacado dentro de la categoria Carga y Powerbanks con un excelente precio de menudeo de $449. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'base-de-carga-magsafe-28', name: 'Base de Carga MagSafe', price: 499, category: 'Carga y Powerbanks', img: 'https://placehold.co/400x400/151515/FFF?text=Base%20de%20Carga%20MagSafe', badge: '', desc: 'Descubre Base de Carga MagSafe, un producto destacado dentro de la categoria Carga y Powerbanks con un excelente precio de menudeo de $499. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'combo-iphone-20w-35w-original-29', name: 'Combo iPhone 20W / 35W Original', price: 199, category: 'Carga y Powerbanks', img: 'https://placehold.co/400x400/151515/FFF?text=Combo%20iPhone%2020W%20%2F%2035W%20Original', badge: '', desc: 'Descubre Combo iPhone 20W / 35W Original, un producto destacado dentro de la categoria Carga y Powerbanks con un excelente precio de menudeo de $199. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'cargador-magsafe-20w-original-30', name: 'Cargador MagSafe 20W Original', price: 299, category: 'Carga y Powerbanks', img: 'https://placehold.co/400x400/151515/FFF?text=Cargador%20MagSafe%2020W%20Original', badge: '', desc: 'Descubre Cargador MagSafe 20W Original, un producto destacado dentro de la categoria Carga y Powerbanks con un excelente precio de menudeo de $299. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'cable-tipo-c-lightning-1m-original-31', name: 'Cable Tipo C Lightning 1M Original', price: 149, category: 'Carga y Powerbanks', img: 'https://placehold.co/400x400/151515/FFF?text=Cable%20Tipo%20C%20Lightning%201M%20Original', badge: '', desc: 'Descubre Cable Tipo C Lightning 1M Original, un producto destacado dentro de la categoria Carga y Powerbanks con un excelente precio de menudeo de $149. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'cable-4-en-1-2m-reforzado-32', name: 'Cable 4 en 1 2M Reforzado', price: 249, category: 'Carga y Powerbanks', img: 'https://placehold.co/400x400/151515/FFF?text=Cable%204%20en%201%202M%20Reforzado', badge: '', desc: 'Descubre Cable 4 en 1 2M Reforzado, un producto destacado dentro de la categoria Carga y Powerbanks con un excelente precio de menudeo de $249. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'aspiradora-de-mano-33', name: 'Aspiradora de Mano', price: 249, category: 'Hogar y Cocina', img: 'https://placehold.co/400x400/151515/FFF?text=Aspiradora%20de%20Mano', badge: '', desc: 'Descubre Aspiradora de Mano, un producto destacado dentro de la categoria Hogar y Cocina con un excelente precio de menudeo de $249. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'dispensador-de-utensilios-34', name: 'Dispensador de Utensilios', price: 449, category: 'Hogar y Cocina', img: 'https://placehold.co/400x400/151515/FFF?text=Dispensador%20de%20Utensilios', badge: '', desc: 'Descubre Dispensador de Utensilios, un producto destacado dentro de la categoria Hogar y Cocina con un excelente precio de menudeo de $449. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'l-mpara-con-ventilador-de-techo-35', name: 'Lámpara con Ventilador de Techo', price: 499, category: 'Hogar y Cocina', img: 'https://placehold.co/400x400/151515/FFF?text=L%C3%A1mpara%20con%20Ventilador%20de%20Techo', badge: '', desc: 'Descubre Lámpara con Ventilador de Techo, un producto destacado dentro de la categoria Hogar y Cocina con un excelente precio de menudeo de $499. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'mochila-contra-agua-paquete-5-piezas-36', name: 'Mochila Contra Agua (Paquete 5 piezas)', price: 199, category: 'Hogar y Cocina', img: 'https://placehold.co/400x400/151515/FFF?text=Mochila%20Contra%20Agua%20(Paquete%205%20piezas)', badge: '', desc: 'Descubre Mochila Contra Agua (Paquete 5 piezas), un producto destacado dentro de la categoria Hogar y Cocina con un excelente precio de menudeo de $199. Ideal para tus necesidades y con la mayor calidad. Paquete 5 piezas = Distribuidor.' },
+            { id: 'game-stick-37', name: 'Game Stick', price: 799, category: 'Gaming y Accesorios', img: 'https://placehold.co/400x400/151515/FFF?text=Game%20Stick', badge: '', desc: 'Descubre Game Stick, un producto destacado dentro de la categoria Gaming y Accesorios con un excelente precio de menudeo de $799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'cybertruck-rc-38', name: 'Cybertruck RC', price: 999, category: 'Gaming y Accesorios', img: 'https://placehold.co/400x400/151515/FFF?text=Cybertruck%20RC', badge: '', desc: 'Descubre Cybertruck RC, un producto destacado dentro de la categoria Gaming y Accesorios con un excelente precio de menudeo de $999. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'gamepad-para-celular-39', name: 'Gamepad para Celular', price: 599, category: 'Gaming y Accesorios', img: 'https://placehold.co/400x400/151515/FFF?text=Gamepad%20para%20Celular', badge: '', desc: 'Descubre Gamepad para Celular, un producto destacado dentro de la categoria Gaming y Accesorios con un excelente precio de menudeo de $599. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'drone-con-c-mara-40', name: 'Drone con Cámara', price: 799, category: 'Drones y Cámaras', img: 'https://placehold.co/400x400/151515/FFF?text=Drone%20con%20C%C3%A1mara', badge: '', desc: 'Descubre Drone con Cámara, un producto destacado dentro de la categoria Drones y Cámaras con un excelente precio de menudeo de $799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'kit-de-herramientas-para-carro-41', name: 'Kit de Herramientas para Carro', price: 599, category: 'Accesorios Auto', img: 'https://placehold.co/400x400/151515/FFF?text=Kit%20de%20Herramientas%20para%20Carro', badge: '', desc: 'Descubre Kit de Herramientas para Carro, un producto destacado dentro de la categoria Accesorios Auto con un excelente precio de menudeo de $599. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'candado-con-huella-digital-42', name: 'Candado con Huella Digital', price: 499, category: 'Accesorios Auto', img: 'https://placehold.co/400x400/151515/FFF?text=Candado%20con%20Huella%20Digital', badge: '', desc: 'Descubre Candado con Huella Digital, un producto destacado dentro de la categoria Accesorios Auto con un excelente precio de menudeo de $499. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'luz-led-con-clip-43', name: 'Luz LED con Clip', price: 249, category: 'Otros', img: 'https://placehold.co/400x400/151515/FFF?text=Luz%20LED%20con%20Clip', badge: '', desc: 'Descubre Luz LED con Clip, un producto destacado dentro de la categoria Otros con un excelente precio de menudeo de $249. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' },
+            { id: 'beats-solo-4-44', name: 'Beats Solo 4', price: 799, category: 'Otros', img: 'https://placehold.co/400x400/151515/FFF?text=Beats%20Solo%204', badge: '', desc: 'Descubre Beats Solo 4, un producto destacado dentro de la categoria Otros con un excelente precio de menudeo de $799. Ideal para tus necesidades y con la mayor calidad.' },
+            { id: 'lentes-inteligentes-g-tide-45', name: 'Lentes Inteligentes G-TIDE', price: 799, category: 'Otros', img: 'https://placehold.co/400x400/151515/FFF?text=Lentes%20Inteligentes%20G-TIDE', badge: '', desc: 'Descubre Lentes Inteligentes G-TIDE, un producto destacado dentro de la categoria Otros con un excelente precio de menudeo de $799. Ideal para tus necesidades y con la mayor calidad. No aplica Distribuidor.' }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('uniteCart')) || [];
+        const grid = document.getElementById('product-grid');
+        const cartCount = document.getElementById('cart-count');
+        const cartCountMobile = document.getElementById('cart-count-mobile');
+        const cartPanel = document.getElementById('cart-panel');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+
+        function render(cat = 'all', search = '') {
+            grid.innerHTML = '';
+            const filtered = products.filter(p => (cat === 'all' || p.category === cat) && p.name.toLowerCase().includes(search.toLowerCase()));
+
+            if(filtered.length === 0) document.getElementById('empty-msg').classList.remove('hidden');
+            else document.getElementById('empty-msg').classList.add('hidden');
+
+            filtered.forEach((p, idx) => {
+                const el = document.createElement('div');
+                el.className = 'glass-card p-4 flex flex-col relative group img-reveal';
+                el.innerHTML = `
+                    ${p.badge ? `<div class="absolute top-4 right-4 bg-textm text-bg-main text-[9px] font-bold px-2 py-1 rounded-full z-20">${p.badge}</div>` : ''}
+                    <a href="producto.html?id=${p.id}" class="block group-hover:opacity-90 transition cursor-pointer flex-grow flex flex-col">
+                        <div class="aspect-square w-full rounded-xl mb-4 flex items-center justify-center p-4 relative overflow-hidden bg-gbg">
+                            <img src="${p.img}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 z-10" loading="lazy">
+                        </div>
+                        <div class="mt-auto px-1 pb-1">
+                            <p class="text-[10px] text-textmuted font-medium mb-1 uppercase tracking-wider">${p.category}</p>
+                            <h3 class="text-base font-semibold text-textm leading-snug mb-3 line-clamp-2">${p.name}</h3>
+                        </div>
+                    </a>
+                    <div class="flex justify-between items-center pt-3 mt-auto px-1 border-t border-gborder">
+                        <span class="font-display font-medium text-textm text-lg">$${p.price}</span>
+                        <button onclick="add('${p.id}')" class="w-8 h-8 bg-gborder hover:bg-textm text-textm hover:text-bg-main rounded-full flex items-center justify-center transition-colors relative z-20 relative px-0 m-0">
+                            <span class="material-symbols-rounded text-[18px]">add</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(el);
+            });
+
+            gsap.fromTo('.img-reveal', 
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: "power2.out" }
+            );
+        }
+
+        window.add = (id) => {
+            const p = products.find(x => x.id === id);
+            cart.push(p);
+            save(); renderCart();
+            gsap.fromTo([cartCount, cartCountMobile], {scale: 1.5}, {scale: 1, duration: 0.3});
+            openCart();
+        };
+
+        function save() {
+            localStorage.setItem('uniteCart', JSON.stringify(cart));
+            cartCount.innerText = cartCountMobile.innerText = cart.length;
+            cartCount.classList.toggle('hidden', cart.length === 0);
+            cartCountMobile.classList.toggle('hidden', cart.length === 0);
+        }
+
+        function renderCart() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            if(cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="text-center text-textmuted py-10 flex flex-col items-center"><span class="material-symbols-rounded text-4xl mb-2 opacity-50">shopping_cart</span><p>Bolsa vacía</p></div>';
+            } else {
+                cart.forEach((item, idx) => {
+                    total += item.price;
+                    const el = document.createElement('div');
+                    el.className = 'flex items-center gap-4 bg-gbg p-3 rounded-2xl border border-gborder';
+                    el.innerHTML = `
+                        <div class="w-16 h-16 bg-main rounded-xl flex items-center justify-center p-2"><img src="${item.img}" class="w-full h-full object-contain"></div>
+                        <div class="flex-grow min-w-0">
+                            <p class="text-sm font-semibold text-textm truncate">${item.name}</p>
+                            <p class="text-xs text-textmuted">$${item.price}</p>
+                        </div>
+                        <button onclick="remove(${idx})" class="p-2 text-textmuted hover:text-textm transition"><span class="material-symbols-rounded text-[20px]">delete</span></button>
+                    `;
+                    cartItemsContainer.appendChild(el);
+                });
+            }
+            cartTotal.innerText = `$${total.toLocaleString()}`;
+        }
+
+        window.remove = (idx) => { cart.splice(idx, 1); save(); renderCart(); };
+
+        const openCart = () => { 
+            cartOverlay.classList.remove('hidden'); 
+            setTimeout(() => { 
+                cartOverlay.classList.remove('opacity-0'); 
+                cartPanel.classList.remove('translate-x-full'); 
+            }, 10); 
+            renderCart(); 
+        };
+        
+        const closeCartFn = () => {
+            cartPanel.classList.add('translate-x-full');
+            cartOverlay.classList.add('opacity-0');
+            setTimeout(() => cartOverlay.classList.add('hidden'), 300);
+        };
+
+        document.getElementById('cart-trigger').addEventListener('click', openCart);
+        document.getElementById('cart-trigger-mobile').addEventListener('click', openCart);
+        document.getElementById('close-cart').addEventListener('click', closeCartFn);
+        cartOverlay.addEventListener('click', closeCartFn);
+
+        document.querySelectorAll('.filter-pill').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-pill').forEach(b => { 
+                    b.classList.remove('active'); 
+                });
+                e.target.classList.add('active');
+                render(e.target.dataset.cat, document.getElementById('search-input').value);
+            });
+        });
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            render(document.querySelector('.filter-pill.active')?.dataset.cat || 'all', e.target.value);
+        });
+
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            if(cart.length === 0) return;
+            let msg = "💳 *Stockeo | Pedido*\n\nHola, quiero comprar:\n";
+            let t = 0;
+            cart.forEach(p => { msg += `• ${p.name} ($${p.price})\n`; t += p.price; });
+            msg += `\n*Total:* $${t}\n\nQuedo atento.`;
+            window.open(`https://wa.me/525574123521?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+
+        save(); render();
+        
+        // --- PWA Logic ---
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.querySelectorAll('.pwa-install-btn').forEach(b => {
+                b.classList.remove('hidden');
+                b.style.display = 'flex';
+            });
+        });
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.querySelectorAll('.pwa-install-btn').forEach(b => b.classList.add('hidden'));
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // --- WhatsApp Modal Logic ---
+        let waMenuOpen = false;
+        function toggleWAMenu() {
+            const menu = document.getElementById('wa-menu');
+            waMenuOpen = !waMenuOpen;
+            if(waMenuOpen) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+                setTimeout(() => { menu.classList.remove('opacity-0', 'translate-y-4'); }, 10);
+            } else {
+                menu.classList.add('opacity-0', 'translate-y-4');
+                setTimeout(() => { 
+                    menu.classList.add('hidden');
+                    menu.classList.remove('flex'); 
+                }, 300);
+            }
+        }
+        function openWAGroup() {
+            toggleWAMenu();
+            const modal = document.getElementById('wa-group-modal');
+            const card = document.getElementById('wa-group-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); card.classList.remove('scale-95'); }, 10);
+        }
+        function closeWAGroup() {
+            const modal = document.getElementById('wa-group-modal');
+            const card = document.getElementById('wa-group-card');
+            modal.classList.add('opacity-0'); card.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+    </script>
+</body>
+</html>

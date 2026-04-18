@@ -1,0 +1,157 @@
+/* Premium Watch Transition Styles - Mobile Optimized */
+.watch-section-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.watch-container {
+    height: 350vh; /* More breathing room for scroll */
+    position: relative;
+    width: 100%;
+    background: var(--bg-main);
+}
+
+/* STICKY VIEWPORT */
+.watch-viewport {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* THE MAIN WATCH */
+#main-transition-watch {
+    position: absolute;
+    width: 35%;
+    max-width: 450px;
+    z-index: 100;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5));
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    will-change: transform, top, left, opacity;
+}
+
+/* Section One */
+.w-slide-one {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+.w-slide-one h1 {
+    font-size: 18vw;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    color: var(--text-main);
+    opacity: 0.1;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+/* Section Two - TEXT OPTIMIZED */
+.w-slide-two {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20; /* High enough to be over deco but under watch */
+    opacity: 0;
+    padding: 0 10%;
+}
+.w-slide-two-content {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    width: 100%;
+    max-width: 1200px;
+}
+.w-slide-two .text {
+    flex: 1;
+    color: var(--text-main);
+    text-align: left;
+    background: rgba(0,0,0,0.4); /* Backdrop for legibility */
+    padding: 2rem;
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+}
+.w-slide-two h2 { 
+    font-size: 4vw; 
+    font-weight: 800; 
+    color: #ff5e00; 
+    margin-bottom: 1rem;
+    line-height: 1;
+}
+.w-slide-two p { 
+    font-size: 1.2vw; 
+    opacity: 0.9; 
+    line-height: 1.5; 
+}
+
+/* Section Three */
+.w-slide-three {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3vw;
+    z-index: 10;
+    background: var(--bg-main);
+    transition: background 0.4s;
+    opacity: 0;
+    padding: 0 5%;
+}
+
+.w-card {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 40px;
+    width: 25vw;
+    height: 55vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 3rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.w-card h3 { font-size: 1.5vw; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; }
+.w-card button { background: var(--btn-bg); color: var(--btn-text); padding: 0.8rem 2rem; border-radius: 50px; font-weight: 700; font-size: 0.9vw; }
+
+/* DECO ASSETS */
+.w-deco { position: absolute; pointer-events: none; z-index: 15; opacity: 0.4; }
+
+@media (max-width: 768px) {
+    #main-transition-watch { 
+        width: 70%; 
+        top: 40%; /* Move watch up on mobile to leave room for text below */
+    }
+    .w-slide-one h1 { font-size: 15vw; }
+    
+    .w-slide-two-content { flex-direction: column; }
+    .w-slide-two { padding: 0 6%; justify-content: flex-end; padding-bottom: 15vh; }
+    .w-slide-two .text { 
+        width: 100%; 
+        padding: 1.5rem; 
+        text-align: center;
+    }
+    .w-slide-two h2 { font-size: 8vw; }
+    .w-slide-two p { font-size: 4vw; }
+    
+    .w-card { width: 85vw; height: 45vh; }
+    .w-card h3 { font-size: 6vw; }
+    .w-card button { font-size: 4vw; padding: 1rem 2.5rem; }
+    .w-slide-three { flex-direction: column; height: auto; padding: 15vh 0; gap: 8vh; }
+    
+    /* Adjust Watch position for mobile card landing */
+    .mobile-watch-land { top: 22% !important; width: 50% !important; left: 50% !important; }
+}

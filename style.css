@@ -1,0 +1,76 @@
+/* Stockeo Global Design System */
+:root {
+    --bg-main: #FDFDFD;
+    --bg-sec: #F5F5F5;
+    --text-main: #0A0A0A;
+    --text-muted: #555555;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --btn-bg: #050505;
+    --btn-text: #FAFAFA;
+    --border-dim: rgba(0,0,0,0.05);
+    --card-grad: linear-gradient(145deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%);
+    --glow: rgba(0,0,0,0.05);
+    
+    /* AirPods Interactive Gradients */
+    --air-grad-1-start: #f0fdf4; --air-grad-1-end: #dcfce7;
+    --air-grad-2-start: #eff6ff; --air-grad-2-end: #dbeafe;
+    --air-grad-3-start: #fff1f2; --air-grad-3-end: #ffe4e6;
+}
+
+.dark {
+    --bg-main: #050505;
+    --bg-sec: #0A0A0A;
+    --text-main: #FAFAFA;
+    --text-muted: #A1A1AA;
+    --glass-bg: rgba(15, 15, 15, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --btn-bg: #E5E5E5;
+    --btn-text: #050505;
+    --border-dim: rgba(255,255,255,0.05);
+    --card-grad: linear-gradient(145deg, rgba(30,30,30,0.5) 0%, rgba(10,10,10,0.5) 100%);
+    --glow: rgba(255,255,255,0.05);
+
+    /* AirPods Interactive Gradients */
+    --air-grad-1-start: #1a2e1f; --air-grad-1-end: #0a140d;
+    --air-grad-2-start: #1a2633; --air-grad-2-end: #0d121a;
+    --air-grad-3-start: #331a1a; --air-grad-3-end: #1a0d0d;
+}
+
+body { background-color: var(--bg-main); color: var(--text-main); transition: background-color 0.4s, color 0.4s; }
+
+.glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); border-bottom: 1px solid var(--glass-border); transition: all 0.4s; }
+.glass-card { background: var(--card-grad); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px var(--glow); position: relative; overflow: hidden; }
+
+/* AirPods Animation Engine */
+.airpods-section { position: relative; width: 100%; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+.airpods-bg { position: absolute; inset: 0; transition: background 2s ease-in-out; z-index: 1; }
+.airpods-container { position: relative; width: 100%; max-width: 1400px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; padding: 2rem; }
+
+.airpods-images { width: 100%; height: 60vh; position: relative; display: flex; justify-content: center; align-items: center; }
+.airpods-img { 
+    position: absolute; 
+    width: 85%; 
+    max-width: 650px; 
+    object-fit: contain; 
+    opacity: 0; 
+    filter: blur(25px); 
+    transform: scale(0.3) translateX(100px); 
+    transition: all 1.8s cubic-bezier(0.19, 1, 0.22, 1); 
+    pointer-events: none; 
+}
+.airpods-img.active { opacity: 1; filter: blur(0); transform: scale(1) translateX(0); z-index: 5; }
+.airpods-img.next { opacity: 0.3; filter: blur(15px); transform: translate(60%, -10%) scale(0.5); z-index: 1; }
+.airpods-img.prev { opacity: 0.3; filter: blur(15px); transform: translate(-60%, 10%) scale(0.5); z-index: 1; }
+
+.airpods-content { width: 100%; text-align: left; opacity: 1; z-index: 20; }
+
+@media (min-width: 768px) {
+    .airpods-container { flex-direction: row !important; gap: 4rem; }
+    .airpods-images { order: 2; height: 80vh; width: 55%; }
+    .airpods-content { order: 1; width: 45%; }
+}
+
+/* Nav etc */
+.mobile-nav { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; border-radius: 999px; z-index: 500; display: flex; justify-content: space-around; align-items: center; padding: 12px 16px; background: var(--glass-bg); backdrop-filter: saturate(180%) blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 20px 40px var(--glow); transition: all 0.4s; }
+.nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; transition: color 0.3s; font-size: 10px; font-weight: 500; gap: 4px; }
